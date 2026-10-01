@@ -85,3 +85,175 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 <div id="m-records" style="max-height:220px; overflow-y:auto;"></div>
 </div>
 </div>
+<script>
+let dbStudents = JSON.parse(localStorage.getItem('rep_students')) || [];
+let dbSchedule = JSON.parse(localStorage.getItem('rep_schedule')) || [];
+let activeStudentId = null;
+function persist() {
+localStorage.setItem('rep_students', JSON.stringify(dbStudents));
+localStorage.setItem('rep_schedule', JSON.stringify(dbSchedule));
+}
+function getNowISO() {
+let d = new Date();
+d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+return d.toISOString().slice(0, 16);
+}
+function prettyDT(str) {
+if (!str) return '';
+let d = new Date(str);
+if (isNaN(d.getTime())) return str;
+let day = String(d.getDate()).padStart(2, '0');
+let mon = String(d.getMonth() + 1).padStart(2, '0');
+let h = String(d.getHours()).padStart(2, '0');
+let m = String(d.getMinutes()).padStart(2, '0');
+return day + '.' + mon + '.' + d.getFullYear() + ' в ' + h + ':' + m;
+}
+function toTab(tab) {
+document.getElementById('btn-tab-st').className = 'tab-btn' + (tab === 'st' ? ' active' : '');
+document.getElementById('btn-tab-sc').className = 'tab-btn' + (tab === 'sc' ? ' active' : '');
+document.getElementById('page-st').style.display = tab === 'st' ? 'block' : 'none';
+document.getElementById('page-sc').style.display = tab === 'sc' ? 'block' : 'none';
+if (tab === 'sc') refreshScheduleUI();
+else refreshStudentsUI();
+}
+function createStudent() {
+let nameEl = document.getElementById('st-name');
+let rateEl = document.getElementById('st-rate');
+let name = nameEl.value.trim();
+let rate = parseFloat(rateEl.value);
+if (!name || isNaN(rate)) { alert('Заполните имя и ставку'); return; }
+dbStudents.push({ id: Date.now(), name: name, rate: rate, balance: 0, history: [] });
+persist();
+nameEl.value = '';
+rateEl.value = '';
+refreshStudentsUI();
+}
+function refreshStudentsUI() {
+let box = document.getElementById('st-list');
+box.innerHTML = '';
+if (!dbStudents.length) {
+box.innerHTML = '<div style="color:var(--muted); text-align:center; padding:16px;">Список пуст</div>';
+return;
+}
+dbStudents.forEach(st => {
+let cls = st.balance > 0 ? 'b-ok' : (st.balance < 0 ? 'b-bad' : 'b-zero');
+let div = document.createElement('div');
+div.className = 'item';
+div.innerHTML = '<div class="item-top"><span>' + st.name + '</span><span class="badge ' + cls + '">' + st.balance + ' ₽</span></div>' +
+'<div style="font-size:12px; color:var(--muted);">Урок: ' + st.rate + ' ₽</div>' +
+'<div class="row-btn">' +
+'<button class="btn-sm btn-hist" onclick="openHistory(' + st.id + ')">История и оплаты</button>' +
+'<button class="btn-sm btn-del" onclick="removeStudent(' + st.id + ')">✕</button>' +
+'</div>';
+box.appendChild(div);
+});
+}
+function removeStudent(id) {
+if (confirm('Удалить ученика?')) {
+dbStudents = dbStudents.filter(s => s.id !== id);
+dbSchedule = dbSchedule.filter(s => s.studentId !== id);
+persist();
+refreshStudentsUI();
+}
+}
+function openHistory(id) {
+activeStudentId = id;
+let st = dbStudents.find(s => s.id === id);
+if (!st) return;
+document.getElementById('m-name').textContent = st.name;
+let bEl = document.getElementById('m-balance');
+bEl.textContent = st.balance + ' ₽';
+bEl.style.color = st.balance >= 0 ? 'var(--ok)' : 'var(--err)';
+document.getElementById('m-pay-dt').value = getNowISO();
+document.getElementById('m-pay-sum').value = '';
+let list = document.getElementById('m-records');
+list.innerHTML = '';
+if (!st.history || !st.history.length) {
+list.innerHTML = '<div style="color:var(--muted); font-size:12px; padding:6px 0;">Записей пока нет</div>';
+} else {
+st.history.slice().reverse().forEach(h => {
+let row = document.createElement('div');
+row.className = 'h-row';
+let isP = h.type === 'pay';
+row.innerHTML = '<div><div>' + (isP ? 'Оплата' : 'Урок проведён') + '</div><div style="font-size:11px; color:var(--muted);">' + prettyDT(h.dt) + '</div></div>' +
+'<div style="font-weight:600; color:' + (isP ? 'var(--ok)' : 'var(--err)') + ';">' + (isP ? '+' : '-') + Math.abs(h.sum) + ' ₽</div>';
+list.appendChild(row);
+});
+}
+document.getElementById('hist-modal').style.display = 'block';
+}
+function recordPayment() {
+let sum = parseFloat(document.getElementById('m-pay-sum').value);
+let dt = document.getElementById('m-pay-dt').value;
+if (isNaN(sum) || sum <= 0 || !dt) { alert('Укажите сумму и дату'); return; }
+let st = dbStudents.find(s => s.id === activeStudentId);
+if (!st) return;
+st.balance += sum;
+st.history.push({ dt: dt, sum: sum, type: 'pay' });
+persist();
+refreshStudentsUI();
+openHistory(activeStudentId);
+}
+function closeModal() {
+document.getElementById('hist-modal').style.display = 'none';
+activeStudentId = null;
+}
+function refreshScheduleUI() {
+let sel = document.getElementById('sc-student');
+sel.innerHTML = '<option value="">Выберите ученика...</option>';
+dbStudents.forEach(st => {
+sel.innerHTML += '<option value="' + st.id + '">' + st.name + ' (' + st.rate + ' ₽)</option>';
+});
+document.getElementById('sc-datetime').value = getNowISO();
+let box = document.getElementById('sc-list');
+box.innerHTML = '';
+if (!dbSchedule.length) {
+box.innerHTML = '<div style="color:var(--muted); text-align:center; padding:16px;">Занятий не запланировано</div>';
+return;
+}
+dbSchedule.sort((a,b) => new Date(a.dt) - new Date(b.dt));
+dbSchedule.forEach(item => {
+let div = document.createElement('div');
+div.className = 'item';
+div.innerHTML = '<div class="item-top"><span>' + item.studentName + '</span><span style="color:var(--acc); font-size:14px;">' + item.rate + ' ₽</span></div>' +
+'<div style="font-size:13px; color:var(--muted); margin-bottom:6px;">📅 ' + prettyDT(item.dt) + '</div>' +
+'<div class="row-btn">' +
+'<button class="btn-sm btn-run" onclick="completeLesson(' + item.id + ')">✔ Провести</button>' +
+'<button class="btn-sm btn-del" onclick="dropLesson(' + item.id + ')">✕</button>' +
+'</div>';
+box.appendChild(div);
+});
+}
+function createSchedule() {
+let id = parseInt(document.getElementById('sc-student').value);
+let dt = document.getElementById('sc-datetime').value;
+if (!id || !dt) { alert('Выберите ученика и время'); return; }
+let st = dbStudents.find(s => s.id === id);
+if (!st) return;
+dbSchedule.push({ id: Date.now(), studentId: st.id, studentName: st.name, dt: dt, rate: st.rate });
+persist();
+refreshScheduleUI();
+}
+function completeLesson(scId) {
+let idx = dbSchedule.findIndex(s => s.id === scId);
+if (idx === -1) return;
+let item = dbSchedule[idx];
+let st = dbStudents.find(s => s.id === item.studentId);
+if (!st) { dropLesson(scId); return; }
+st.balance -= item.rate;
+st.history.push({ dt: item.dt, sum: item.rate, type: 'lesson' });
+dbSchedule.splice(idx, 1);
+persist();
+refreshScheduleUI();
+}
+function dropLesson(scId) {
+if (confirm('Отменить занятие?')) {
+dbSchedule = dbSchedule.filter(s => s.id !== scId);
+persist();
+refreshScheduleUI();
+}
+}
+refreshStudentsUI();
+</script>
+</body>
+</html>
