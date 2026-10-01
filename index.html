@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Репетитор</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,11 +28,12 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px);
+      padding: calc(env(safe-area-inset-top, 20px) + 12px) 16px calc(env(safe-area-inset-bottom, 20px) + 16px);
       min-height: 100vh;
+      overflow-x: hidden;
     }
     header {
-      padding: 16px 0;
+      padding-bottom: 16px;
       text-align: center;
     }
     h1 {
@@ -44,7 +45,7 @@
       background: var(--card-bg);
       border-radius: 12px;
       padding: 4px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       border: 1px solid var(--border);
     }
     .tab-btn {
@@ -68,6 +69,7 @@
       padding: 16px;
       margin-bottom: 16px;
       border: 1px solid var(--border);
+      width: 100%;
     }
     .card-title {
       font-size: 18px;
@@ -83,17 +85,28 @@
     }
     input, select {
       width: 100%;
-      padding: 12px;
+      height: 44px;
+      padding: 0 12px;
       background: #0f172a;
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--text);
       font-size: 16px;
       margin-bottom: 14px;
+      display: block;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 36px;
     }
     button.btn-primary {
       width: 100%;
-      padding: 12px;
+      height: 46px;
       background: var(--accent);
       color: #0f172a;
       border: none;
@@ -137,7 +150,7 @@
     }
     .btn-small {
       flex: 1;
-      padding: 8px;
+      height: 38px;
       font-size: 14px;
       border-radius: 8px;
       border: none;
@@ -151,29 +164,30 @@
     .btn-delete {
       background: rgba(248, 113, 113, 0.15);
       color: var(--danger);
-      flex: 0 0 40px;
+      flex: 0 0 44px;
     }
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(4px);
       z-index: 100;
-      padding: 20px;
+      padding: 20px 16px;
       overflow-y: auto;
     }
     .modal-content {
       background: var(--card-bg);
       border-radius: 16px;
-      padding: 20px;
+      padding: 16px;
       max-width: 500px;
-      margin: 40px auto 0;
+      margin: 30px auto 0;
       border: 1px solid var(--border);
     }
     .history-item {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 10px 0;
       border-bottom: 1px solid var(--border);
       font-size: 14px;
@@ -207,7 +221,7 @@
       <button class="btn-primary" onclick="addStudent()">Сохранить ученика</button>
     </div>
 
-    <div class="card-title" style="margin-top: 20px;">Список учеников</div>
+    <div class="card-title" style="margin-top: 10px;">Список учеников</div>
     <div id="students-list"></div>
   </section>
 
@@ -218,8 +232,8 @@
       <label>Выберите ученика</label>
       <select id="lesson-student"></select>
 
-      <label>Дата занятия</label>
-      <input type="date" id="lesson-date">
+      <label>Дата и время занятия</label>
+      <input type="datetime-local" id="lesson-datetime">
 
       <button class="btn-primary" onclick="conductLesson()">Списать за занятие</button>
     </div>
@@ -228,9 +242,9 @@
   <!-- МОДАЛЬНОЕ ОКНО ИСТОРИИ ОПЛАТ -->
   <div class="modal" id="student-modal">
     <div class="modal-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <h2 id="modal-student-name" style="font-size: 20px;"></h2>
-        <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer;">✕</button>
+        <button onclick="closeModal()" style="background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; padding: 4px;">✕</button>
       </div>
 
       <div style="margin-bottom: 16px;">
@@ -242,13 +256,13 @@
         <label>Внести оплату (₽)</label>
         <input type="number" id="payment-amount" placeholder="Сумма, например 5000">
         
-        <label>Дата оплаты</label>
-        <input type="date" id="payment-date">
+        <label>Дата и время оплаты</label>
+        <input type="datetime-local" id="payment-datetime">
 
         <button class="btn-primary" onclick="addPayment()">Зачислить оплату</button>
       </div>
 
-      <div class="card-title" style="font-size: 16px;">История по датам</div>
+      <div class="card-title" style="font-size: 16px;">История по датам и времени</div>
       <div id="modal-history" style="max-height: 250px; overflow-y: auto;"></div>
     </div>
   </div>
@@ -259,6 +273,23 @@
 
     function save() {
       localStorage.setItem('rep_students', JSON.stringify(students));
+    }
+
+    function formatNow() {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      return now.toISOString().slice(0, 16);
+    }
+
+    function formatDisplayDate(isoString) {
+      if (!isoString) return '';
+      const d = new Date(isoString);
+      if (isNaN(d.getTime())) return isoString;
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const hours = String(d.getHours()).padStart(2, '0');
+      const mins = String(d.getMinutes()).padStart(2, '0');
+      return `${day}.${month}.${d.getFullYear()} в ${hours}:${mins}`;
     }
 
     function switchTab(tab) {
@@ -289,7 +320,7 @@
         name,
         rate,
         balance: 0,
-        history: [] // { date, amount, type: 'payment' | 'lesson' }
+        history: []
       });
 
       save();
@@ -303,7 +334,7 @@
       list.innerHTML = '';
 
       if (students.length === 0) {
-        list.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 20px;">Нет учеников</div>';
+        list.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 20px;">Нет добавленных учеников</div>';
         return;
       }
 
@@ -339,7 +370,7 @@
       document.getElementById('modal-student-name').textContent = st.name;
       document.getElementById('modal-balance').textContent = `${st.balance} ₽`;
       document.getElementById('modal-balance').style.color = st.balance >= 0 ? 'var(--success)' : 'var(--danger)';
-      document.getElementById('payment-date').valueAsDate = new Date();
+      document.getElementById('payment-datetime').value = formatNow();
       document.getElementById('payment-amount').value = '';
 
       renderHistory(st);
@@ -351,7 +382,7 @@
       histDiv.innerHTML = '';
 
       if (!st.history || st.history.length === 0) {
-        histDiv.innerHTML = '<div style="color: var(--text-muted); font-size: 13px; padding: 8px 0;">Истории оплат пока нет</div>';
+        histDiv.innerHTML = '<div style="color: var(--text-muted); font-size: 13px; padding: 8px 0;">Истории операций пока нет</div>';
         return;
       }
 
@@ -361,8 +392,8 @@
         const isPay = item.type === 'payment';
         row.innerHTML = `
           <div>
-            <div style="font-weight: 500;">${isPay ? 'Оплата' : 'Урок'}</div>
-            <div style="font-size: 12px; color: var(--text-muted);">${item.date}</div>
+            <div style="font-weight: 500;">${isPay ? 'Оплата от ученика' : 'Проведено занятие'}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">${formatDisplayDate(item.datetime)}</div>
           </div>
           <div style="font-weight: 600; color: ${isPay ? 'var(--success)' : 'var(--danger)'};">
             ${isPay ? '+' : '-'}${Math.abs(item.amount)} ₽
@@ -374,10 +405,10 @@
 
     function addPayment() {
       const amount = parseFloat(document.getElementById('payment-amount').value);
-      const date = document.getElementById('payment-date').value;
+      const datetime = document.getElementById('payment-datetime').value;
 
-      if (isNaN(amount) || amount <= 0 || !date) {
-        alert('Введите корректную сумму и дату');
+      if (isNaN(amount) || amount <= 0 || !datetime) {
+        alert('Введите корректную сумму, дату и время');
         return;
       }
 
@@ -386,7 +417,7 @@
 
       st.balance += amount;
       st.history.push({
-        date,
+        datetime,
         amount,
         type: 'payment'
       });
@@ -399,10 +430,10 @@
     function conductLesson() {
       const select = document.getElementById('lesson-student');
       const id = parseInt(select.value);
-      const date = document.getElementById('lesson-date').value;
+      const datetime = document.getElementById('lesson-datetime').value;
 
-      if (!id || !date) {
-        alert('Выберите ученика и дату');
+      if (!id || !datetime) {
+        alert('Выберите ученика, дату и время');
         return;
       }
 
@@ -411,7 +442,7 @@
 
       st.balance -= st.rate;
       st.history.push({
-        date,
+        datetime,
         amount: st.rate,
         type: 'lesson'
       });
@@ -435,7 +466,7 @@
       students.forEach(st => {
         select.innerHTML += `<option value="${st.id}">${st.name} (${st.rate} ₽)</option>`;
       });
-      document.getElementById('lesson-date').valueAsDate = new Date();
+      document.getElementById('lesson-datetime').value = formatNow();
     }
 
     function closeModal() {
@@ -443,7 +474,6 @@
       currentStudentId = null;
     }
 
-    // Инициализация при старте
     renderStudents();
   </script>
 </body>
