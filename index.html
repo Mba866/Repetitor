@@ -7,20 +7,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Репетитор">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%230f172a'/%3E%3Crect x='116' y='60' width='280' height='130' rx='14' fill='%231e293b' stroke='%2338bdf8' stroke-width='10'/%3E%3Ccircle cx='180' cy='240' r='42' fill='%2338bdf8'/%3E%3Cpath d='M120 370c0-45 35-70 60-70s60 25 60 70' fill='%2338bdf8'/%3E%3Ccircle cx='332' cy='255' r='36' fill='%2334d399'/%3E%3Cpath d='M280 370c0-38 30-60 52-60s52 22 52 60' fill='%2334d399'/%3E%3Crect x='90' y='360' width='332' height='24' rx='12' fill='%23475569'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%230f172a'/%3E%3Crect x='116' y='60' width='280' height='130' rx='14' fill='%231e293b' stroke='%2338bdf8' stroke-width='10'/%3E%3Cpath d='M150 110h80M150 140h120' stroke='%2394a3b8' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='180' cy='240' r='42' fill='%2338bdf8'/%3E%3Cpath d='M120 370c0-45 35-70 60-70s60 25 60 70' fill='%2338bdf8'/%3E%3Ccircle cx='332' cy='255' r='36' fill='%2334d399'/%3E%3Cpath d='M280 370c0-38 30-60 52-60s52 22 52 60' fill='%2334d399'/%3E%3Crect x='90' y='360' width='332' height='24' rx='12' fill='%23475569'/%3E%3Crect x='125' y='384' width='20' height='75' rx='6' fill='%23334155'/%3E%3Crect x='367' y='384' width='20' height='75' rx='6' fill='%23334155'/%3E%3C/svg%3E">
 <style>
 :root { --bg:#0f172a; --card:#1e293b; --txt:#f8fafc; --muted:#94a3b8; --acc:#38bdf8; --ok:#34d399; --err:#f87171; --bdr:#334155; }
 * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-body { font-family:-apple-system,sans-serif; background:var(--bg); color:var(--txt); padding:calc(env(safe-area-inset-top,20px) + 10px) 16px 30px; min-height:100vh; }
+body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--txt); padding:calc(env(safe-area-inset-top,20px) + 10px) 16px 40px; min-height:100vh; }
 header h1 { font-size:22px; text-align:center; margin-bottom:14px; }
-.tabs { display:flex; background:var(--card); border-radius:10px; padding:3px; margin-bottom:16px; border:1px solid var(--bdr); }
-.tab-btn { flex:1; padding:9px; background:none; border:none; color:var(--muted); font-size:14px; font-weight:600; border-radius:7px; cursor:pointer; }
+.tabs { display:flex; background:var(--card); border-radius:10px; padding:4px; margin-bottom:16px; border:1px solid var(--bdr); }
+.tab-btn { flex:1; padding:12px; background:transparent; border:none; color:var(--muted); font-size:15px; font-weight:600; border-radius:8px; cursor:pointer; }
 .tab-btn.active { background:var(--acc); color:#0f172a; }
 .card { background:var(--card); border-radius:14px; padding:14px; margin-bottom:14px; border:1px solid var(--bdr); }
 .card-title { font-size:16px; font-weight:600; margin-bottom:10px; color:var(--acc); }
 label { display:block; font-size:12px; color:var(--muted); margin-bottom:5px; }
-input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; border:1px solid var(--bdr); border-radius:8px; color:var(--txt); font-size:15px; margin-bottom:12px; display:block; appearance:none; -webkit-appearance:none; }
-.btn-main { width:100%; height:44px; background:var(--acc); color:#0f172a; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; }
+input, select { width:100%; height:44px; padding:0 12px; background:#0f172a; border:1px solid var(--bdr); border-radius:8px; color:var(--txt); font-size:15px; margin-bottom:12px; display:block; appearance:none; -webkit-appearance:none; }
+.btn-main { width:100%; height:46px; background:var(--acc); color:#0f172a; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; }
 .item { background:var(--card); border:1px solid var(--bdr); border-radius:10px; padding:12px; margin-bottom:10px; }
 .item-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-weight:600; font-size:16px; }
 .badge { padding:3px 8px; border-radius:12px; font-size:12px; }
@@ -28,9 +28,9 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 .b-bad { background:rgba(248,113,113,.2); color:var(--err); }
 .b-zero { background:rgba(148,163,184,.2); color:var(--muted); }
 .row-btn { display:flex; gap:8px; margin-top:10px; }
-.btn-sm { flex:1; height:36px; border:none; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; }
+.btn-sm { flex:1; height:38px; border:none; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; }
 .btn-hist { background:#334155; color:var(--txt); }
-.btn-del { background:rgba(248,113,113,.15); color:var(--err); flex:0 0 40px; }
+.btn-del { background:rgba(248,113,113,.15); color:var(--err); flex:0 0 42px; }
 .btn-run { background:rgba(52,211,153,.2); color:var(--ok); }
 .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100; padding:20px 16px; overflow-y:auto; }
 .modal-box { background:var(--card); border-radius:14px; padding:16px; border:1px solid var(--bdr); margin-top:20px; }
@@ -40,8 +40,8 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 <body>
 <header><h1>Репетитор</h1></header>
 <div class="tabs">
-<button class="tab-btn active" id="btn-tab-st" onclick="toTab('st')">Ученики</button>
-<button class="tab-btn" id="btn-tab-sc" onclick="toTab('sc')">Расписание</button>
+<button type="button" class="tab-btn active" id="btn-tab-st">Ученики</button>
+<button type="button" class="tab-btn" id="btn-tab-sc">Расписание</button>
 </div>
 <div id="page-st">
 <div class="card">
@@ -50,7 +50,7 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 <input type="text" id="st-name" placeholder="Например: Ахмед">
 <label>Ставка за урок (₽)</label>
 <input type="number" id="st-rate" placeholder="1000">
-<button class="btn-main" onclick="createStudent()">Добавить ученика</button>
+<button type="button" class="btn-main" id="btn-add-st">Добавить ученика</button>
 </div>
 <div class="card-title">Список учеников</div>
 <div id="st-list"></div>
@@ -62,7 +62,7 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 <select id="sc-student"></select>
 <label>Дата и время</label>
 <input type="datetime-local" id="sc-datetime">
-<button class="btn-main" onclick="createSchedule()">Добавить в график</button>
+<button type="button" class="btn-main" id="btn-add-sc">Добавить в график</button>
 </div>
 <div class="card-title">Предстоящие уроки</div>
 <div id="sc-list"></div>
@@ -71,7 +71,7 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 <div class="modal-box">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
 <h2 id="m-name" style="font-size:18px;"></h2>
-<button onclick="closeModal()" style="background:none; border:none; color:var(--muted); font-size:22px; cursor:pointer;">✕</button>
+<button type="button" id="btn-close-m" style="background:none; border:none; color:var(--muted); font-size:22px; cursor:pointer;">✕</button>
 </div>
 <div style="font-size:14px; margin-bottom:14px;">Баланс: <strong id="m-balance"></strong></div>
 <div style="background:#0f172a; padding:10px; border-radius:8px; border:1px solid var(--bdr); margin-bottom:14px;">
@@ -79,176 +79,211 @@ input, select { width:100%; height:42px; padding:0 10px; background:#0f172a; bor
 <input type="number" id="m-pay-sum" placeholder="Сумма, например 5000">
 <label>Дата и время</label>
 <input type="datetime-local" id="m-pay-dt">
-<button class="btn-main" onclick="recordPayment()">Зачислить</button>
+<button type="button" class="btn-main" id="btn-save-pay">Зачислить</button>
 </div>
 <div class="card-title" style="font-size:14px;">История операций</div>
 <div id="m-records" style="max-height:220px; overflow-y:auto;"></div>
 </div>
 </div>
 <script>
-let dbStudents = JSON.parse(localStorage.getItem('rep_students')) || [];
-let dbSchedule = JSON.parse(localStorage.getItem('rep_schedule')) || [];
-let activeStudentId = null;
+var dbStudents = [];
+var dbSchedule = [];
+var activeStudentId = null;
+try {
+dbStudents = JSON.parse(localStorage.getItem('rep_students')) || [];
+dbSchedule = JSON.parse(localStorage.getItem('rep_schedule')) || [];
+} catch(e) {
+dbStudents = [];
+dbSchedule = [];
+}
 function persist() {
+try {
 localStorage.setItem('rep_students', JSON.stringify(dbStudents));
 localStorage.setItem('rep_schedule', JSON.stringify(dbSchedule));
+} catch(e) {}
 }
 function getNowISO() {
-let d = new Date();
+var d = new Date();
 d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
 return d.toISOString().slice(0, 16);
 }
 function prettyDT(str) {
 if (!str) return '';
-let d = new Date(str);
+var d = new Date(str);
 if (isNaN(d.getTime())) return str;
-let day = String(d.getDate()).padStart(2, '0');
-let mon = String(d.getMonth() + 1).padStart(2, '0');
-let h = String(d.getHours()).padStart(2, '0');
-let m = String(d.getMinutes()).padStart(2, '0');
+var day = String(d.getDate()).padStart(2, '0');
+var mon = String(d.getMonth() + 1).padStart(2, '0');
+var h = String(d.getHours()).padStart(2, '0');
+var m = String(d.getMinutes()).padStart(2, '0');
 return day + '.' + mon + '.' + d.getFullYear() + ' в ' + h + ':' + m;
 }
-function toTab(tab) {
-document.getElementById('btn-tab-st').className = 'tab-btn' + (tab === 'st' ? ' active' : '');
-document.getElementById('btn-tab-sc').className = 'tab-btn' + (tab === 'sc' ? ' active' : '');
-document.getElementById('page-st').style.display = tab === 'st' ? 'block' : 'none';
-document.getElementById('page-sc').style.display = tab === 'sc' ? 'block' : 'none';
-if (tab === 'sc') refreshScheduleUI();
-else refreshStudentsUI();
+function showTab(tab) {
+var btnSt = document.getElementById('btn-tab-st');
+var btnSc = document.getElementById('btn-tab-sc');
+var pageSt = document.getElementById('page-st');
+var pageSc = document.getElementById('page-sc');
+if (tab === 'st') {
+btnSt.className = 'tab-btn active';
+btnSc.className = 'tab-btn';
+pageSt.style.display = 'block';
+pageSc.style.display = 'none';
+refreshStudentsUI();
+} else {
+btnSt.className = 'tab-btn';
+btnSc.className = 'tab-btn active';
+pageSt.style.display = 'none';
+pageSc.style.display = 'block';
+refreshScheduleUI();
 }
-function createStudent() {
-let nameEl = document.getElementById('st-name');
-let rateEl = document.getElementById('st-rate');
-let name = nameEl.value.trim();
-let rate = parseFloat(rateEl.value);
+}
+document.getElementById('btn-tab-st').onclick = function() { showTab('st'); };
+document.getElementById('btn-tab-sc').onclick = function() { showTab('sc'); };
+document.getElementById('btn-add-st').onclick = function() {
+var nameEl = document.getElementById('st-name');
+var rateEl = document.getElementById('st-rate');
+var name = nameEl.value.trim();
+var rate = parseFloat(rateEl.value);
 if (!name || isNaN(rate)) { alert('Заполните имя и ставку'); return; }
 dbStudents.push({ id: Date.now(), name: name, rate: rate, balance: 0, history: [] });
 persist();
 nameEl.value = '';
 rateEl.value = '';
 refreshStudentsUI();
-}
+};
 function refreshStudentsUI() {
-let box = document.getElementById('st-list');
+var box = document.getElementById('st-list');
 box.innerHTML = '';
 if (!dbStudents.length) {
 box.innerHTML = '<div style="color:var(--muted); text-align:center; padding:16px;">Список пуст</div>';
 return;
 }
-dbStudents.forEach(st => {
-let cls = st.balance > 0 ? 'b-ok' : (st.balance < 0 ? 'b-bad' : 'b-zero');
-let div = document.createElement('div');
+for (var i = 0; i < dbStudents.length; i++) {
+(function(st) {
+var cls = st.balance > 0 ? 'b-ok' : (st.balance < 0 ? 'b-bad' : 'b-zero');
+var div = document.createElement('div');
 div.className = 'item';
 div.innerHTML = '<div class="item-top"><span>' + st.name + '</span><span class="badge ' + cls + '">' + st.balance + ' ₽</span></div>' +
 '<div style="font-size:12px; color:var(--muted);">Урок: ' + st.rate + ' ₽</div>' +
 '<div class="row-btn">' +
-'<button class="btn-sm btn-hist" onclick="openHistory(' + st.id + ')">История и оплаты</button>' +
-'<button class="btn-sm btn-del" onclick="removeStudent(' + st.id + ')">✕</button>' +
+'<button type="button" class="btn-sm btn-hist">История и оплаты</button>' +
+'<button type="button" class="btn-sm btn-del">✕</button>' +
 '</div>';
+div.querySelector('.btn-hist').onclick = function() { openHistory(st.id); };
+div.querySelector('.btn-del').onclick = function() { removeStudent(st.id); };
 box.appendChild(div);
-});
+})(dbStudents[i]);
+}
 }
 function removeStudent(id) {
 if (confirm('Удалить ученика?')) {
-dbStudents = dbStudents.filter(s => s.id !== id);
-dbSchedule = dbSchedule.filter(s => s.studentId !== id);
+dbStudents = dbStudents.filter(function(s) { return s.id !== id; });
+dbSchedule = dbSchedule.filter(function(s) { return s.studentId !== id; });
 persist();
 refreshStudentsUI();
 }
 }
 function openHistory(id) {
 activeStudentId = id;
-let st = dbStudents.find(s => s.id === id);
+var st = dbStudents.find(function(s) { return s.id === id; });
 if (!st) return;
 document.getElementById('m-name').textContent = st.name;
-let bEl = document.getElementById('m-balance');
+var bEl = document.getElementById('m-balance');
 bEl.textContent = st.balance + ' ₽';
 bEl.style.color = st.balance >= 0 ? 'var(--ok)' : 'var(--err)';
 document.getElementById('m-pay-dt').value = getNowISO();
 document.getElementById('m-pay-sum').value = '';
-let list = document.getElementById('m-records');
+var list = document.getElementById('m-records');
 list.innerHTML = '';
 if (!st.history || !st.history.length) {
 list.innerHTML = '<div style="color:var(--muted); font-size:12px; padding:6px 0;">Записей пока нет</div>';
 } else {
-st.history.slice().reverse().forEach(h => {
-let row = document.createElement('div');
+var copy = st.history.slice().reverse();
+for (var i = 0; i < copy.length; i++) {
+var h = copy[i];
+var isP = (h.type === 'pay');
+var row = document.createElement('div');
 row.className = 'h-row';
-let isP = h.type === 'pay';
 row.innerHTML = '<div><div>' + (isP ? 'Оплата' : 'Урок проведён') + '</div><div style="font-size:11px; color:var(--muted);">' + prettyDT(h.dt) + '</div></div>' +
 '<div style="font-weight:600; color:' + (isP ? 'var(--ok)' : 'var(--err)') + ';">' + (isP ? '+' : '-') + Math.abs(h.sum) + ' ₽</div>';
 list.appendChild(row);
-});
+}
 }
 document.getElementById('hist-modal').style.display = 'block';
 }
-function recordPayment() {
-let sum = parseFloat(document.getElementById('m-pay-sum').value);
-let dt = document.getElementById('m-pay-dt').value;
+document.getElementById('btn-close-m').onclick = function() {
+document.getElementById('hist-modal').style.display = 'none';
+activeStudentId = null;
+};
+document.getElementById('btn-save-pay').onclick = function() {
+var sum = parseFloat(document.getElementById('m-pay-sum').value);
+var dt = document.getElementById('m-pay-dt').value;
 if (isNaN(sum) || sum <= 0 || !dt) { alert('Укажите сумму и дату'); return; }
-let st = dbStudents.find(s => s.id === activeStudentId);
+var st = dbStudents.find(function(s) { return s.id === activeStudentId; });
 if (!st) return;
 st.balance += sum;
+if (!st.history) st.history = [];
 st.history.push({ dt: dt, sum: sum, type: 'pay' });
 persist();
 refreshStudentsUI();
 openHistory(activeStudentId);
-}
-function closeModal() {
-document.getElementById('hist-modal').style.display = 'none';
-activeStudentId = null;
-}
+};
 function refreshScheduleUI() {
-let sel = document.getElementById('sc-student');
+var sel = document.getElementById('sc-student');
 sel.innerHTML = '<option value="">Выберите ученика...</option>';
-dbStudents.forEach(st => {
-sel.innerHTML += '<option value="' + st.id + '">' + st.name + ' (' + st.rate + ' ₽)</option>';
-});
+for (var i = 0; i < dbStudents.length; i++) {
+sel.innerHTML += '<option value="' + dbStudents[i].id + '">' + dbStudents[i].name + ' (' + dbStudents[i].rate + ' ₽)</option>';
+}
 document.getElementById('sc-datetime').value = getNowISO();
-let box = document.getElementById('sc-list');
+var box = document.getElementById('sc-list');
 box.innerHTML = '';
 if (!dbSchedule.length) {
 box.innerHTML = '<div style="color:var(--muted); text-align:center; padding:16px;">Занятий не запланировано</div>';
 return;
 }
-dbSchedule.sort((a,b) => new Date(a.dt) - new Date(b.dt));
-dbSchedule.forEach(item => {
-let div = document.createElement('div');
+dbSchedule.sort(function(a, b) { return new Date(a.dt) - new Date(b.dt); });
+for (var j = 0; j < dbSchedule.length; j++) {
+(function(item) {
+var div = document.createElement('div');
 div.className = 'item';
 div.innerHTML = '<div class="item-top"><span>' + item.studentName + '</span><span style="color:var(--acc); font-size:14px;">' + item.rate + ' ₽</span></div>' +
 '<div style="font-size:13px; color:var(--muted); margin-bottom:6px;">📅 ' + prettyDT(item.dt) + '</div>' +
 '<div class="row-btn">' +
-'<button class="btn-sm btn-run" onclick="completeLesson(' + item.id + ')">✔ Провести</button>' +
-'<button class="btn-sm btn-del" onclick="dropLesson(' + item.id + ')">✕</button>' +
+'<button type="button" class="btn-sm btn-run">✔ Провести</button>' +
+'<button type="button" class="btn-sm btn-del">✕</button>' +
 '</div>';
+div.querySelector('.btn-run').onclick = function() { completeLesson(item.id); };
+div.querySelector('.btn-del').onclick = function() { dropLesson(item.id); };
 box.appendChild(div);
-});
+})(dbSchedule[j]);
 }
-function createSchedule() {
-let id = parseInt(document.getElementById('sc-student').value);
-let dt = document.getElementById('sc-datetime').value;
+}
+document.getElementById('btn-add-sc').onclick = function() {
+var id = parseInt(document.getElementById('sc-student').value);
+var dt = document.getElementById('sc-datetime').value;
 if (!id || !dt) { alert('Выберите ученика и время'); return; }
-let st = dbStudents.find(s => s.id === id);
+var st = dbStudents.find(function(s) { return s.id === id; });
 if (!st) return;
 dbSchedule.push({ id: Date.now(), studentId: st.id, studentName: st.name, dt: dt, rate: st.rate });
 persist();
 refreshScheduleUI();
-}
+};
 function completeLesson(scId) {
-let idx = dbSchedule.findIndex(s => s.id === scId);
+var idx = dbSchedule.findIndex(function(s) { return s.id === scId; });
 if (idx === -1) return;
-let item = dbSchedule[idx];
-let st = dbStudents.find(s => s.id === item.studentId);
-if (!st) { dropLesson(scId); return; }
+var item = dbSchedule[idx];
+var st = dbStudents.find(function(s) { return s.id === item.studentId; });
+if (st) {
 st.balance -= item.rate;
+if (!st.history) st.history = [];
 st.history.push({ dt: item.dt, sum: item.rate, type: 'lesson' });
+}
 dbSchedule.splice(idx, 1);
 persist();
 refreshScheduleUI();
 }
 function dropLesson(scId) {
 if (confirm('Отменить занятие?')) {
-dbSchedule = dbSchedule.filter(s => s.id !== scId);
+dbSchedule = dbSchedule.filter(function(s) { return s.id !== scId; });
 persist();
 refreshScheduleUI();
 }
