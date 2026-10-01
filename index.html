@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Репетитор</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/calculator--v1.png">
+  <style>
+    :root {
+      --bg: #F2F2F7;
+      --card: #FFFFFF;
+      --tint: #007AFF;
+      --green: #34C759;
+      --red: #FF3B30;
+      --text: #000000;
+      --subtext: #8E8E93;
+      --border: #E5E5EA;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: 20px 16px 90px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    h1 { font-size: 26px; font-weight: 700; margin: 0 0 16px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .badge-positive { background: #E8F8EE; color: var(--green); }
+    .badge-negative { background: #FDE8E7; color: var(--red); }
+    .badge-zero { background: #F2F2F7; color: var(--subtext); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 12px; }
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--tint); color: #fff; }
+    .btn-success { background: var(--green); color: #fff; }
+    .btn-cal { background: #5856D6; color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 13px; font-weight: 600; padding: 8px; }
+
+    /* Формы */
+    label { font-size: 13px; color: var(--subtext); margin-bottom: 4px; display: block; }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    /* Навигация внизу */
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      border-top: 1px solid var(--border);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 13px;
+      color: var(--subtext);
+      text-align: center;
+      background: none;
+      border: none;
+      font-weight: 500;
+    }
+    .tab-btn.active { color: var(--tint); font-weight: 700; }
+    .view { display: none; }
+    .view.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Вкладка: Ученики -->
+  <div id="view-students" class="view active">
+    <h1>Ученики</h1>
+    <div id="students-list"></div>
+    <div class="card">
+      <div class="card-title">Добавить ученика</div>
+      <label>Имя ученика</label>
+      <input type="text" id="new-name" placeholder="Например: Артем">
+      <label>Цена за урок (руб)</label>
+      <input type="number" id="new-price" placeholder="1000">
+      <button class="btn-primary" onclick="addStudent()">Сохранить ученика</button>
+    </div>
+  </div>
+
+  <!-- Вкладка: Занятия -->
+  <div id="view-lessons" class="view">
+    <h1>Расписание</h1>
+    <div id="lessons-list"></div>
+    <div class="card">
+      <div class="card-title">Запланировать занятие</div>
+      <label>Ученик</label>
+      <select id="lesson-student"></select>
+      <label>Дата и время</label>
+      <input type="datetime-local" id="lesson-time">
+      <label>Тема занятия</label>
+      <input type="text" id="lesson-topic" placeholder="Например: Графики функций (ОГЭ)">
+      <button class="btn-primary" onclick="addLesson()">Запланировать урок</button>
+    </div>
+  </div>
+
+  <!-- Нижняя панель -->
+  <div class="tabbar">
+    <button class="tab-btn active" onclick="switchTab('students')">👥 Ученики</button>
+    <button class="tab-btn" onclick="switchTab('lessons')">📅 Занятия</button>
+  </div>
+
+  <script>
+    // Инициализация базы данных в памяти телефона
+    let students = JSON.parse(localStorage.getItem('rep_students') || '[]');
+    let lessons = JSON.parse(localStorage.getItem('rep_lessons') || '[]');
+
+    function save() {
+      localStorage.setItem('rep_students', JSON.stringify(students));
+      localStorage.setItem('rep_lessons', JSON.stringify(lessons));
+      render();
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (tab === 'students') {
+        document.getElementById('view-students').classList.add('active');
+        event.currentTarget.classList.add('active');
+      } else {
+        document.getElementById('view-lessons').classList.add('active');
+        event.currentTarget.classList.add('active');
+      }
+    }
+
+    function addStudent() {
+      const name = document.getElementById('new-name').value.trim();
+      const price = parseFloat(document.getElementById('new-price').value);
+      if (!name || isNaN(price)) return alert('Введите имя и цену');
+
+      students.push({ id: Date.now(), name, price, balance: 0 });
+      document.getElementById('new-name').value = '';
+      document.getElementById('new-price').value = '';
+      save();
+    }
+
+    function addPayment(id) {
+      const sum = prompt('Сколько оплачено (руб):');
+      if (sum && !isNaN(sum)) {
+        const student = students.find(s => s.id === id);
+        student.balance += parseFloat(sum);
+        save();
+      }
+    }
+
+    function markLessonHeld(id) {
+      const student = students.find(s => s.id === id);
+      if (confirm(`Списать ${student.price} руб за проведенный урок с ${student.name}?`)) {
+        student.balance -= student.price;
+        save();
+      }
+    }
+
+    function addLesson() {
+      const sId = parseInt(document.getElementById('lesson-student').value);
+      const time = document.getElementById('lesson-time').value;
+      const topic = document.getElementById('lesson-topic').value || 'Занятие';
+      if (!sId || !time) return alert('Выберите ученика и время');
+
+      const student = students.find(s => s.id === sId);
+      lessons.unshift({ id: Date.now(), studentName: student.name, time, topic });
+      save();
+    }
+
+    // Создание ссылки для добавления в системный Календарь iPhone
+    function getCalUrl(lesson) {
+      const d = new Date(lesson.time);
+      const isoStart = d.toISOString().replace(/-|:|\.\d\d\d/g, "");
+      const endD = new Date(d.getTime() + 60*60*1000); // +1 час
+      const isoEnd = endD.toISOString().replace(/-|:|\.\d\d\d/g, "");
+      const title = encodeURIComponent(`Урок: ${lesson.studentName}`);
+      const details = encodeURIComponent(lesson.topic);
+      return `data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:${title}%0ADESCRIPTION:${details}%0ADTSTART:${isoStart}%0ADTEND:${isoEnd}%0AEND:VEVENT%0AEND:VCALENDAR`;
+    }
+
+    function render() {
+      // Отрисовка списка учеников
+      const sList = document.getElementById('students-list');
+      sList.innerHTML = '';
+      const select = document.getElementById('lesson-student');
+      select.innerHTML = '<option value="">-- Выберите ученика --</option>';
+
+      students.forEach(s => {
+        select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        
+        let badgeHtml = '';
+        const lessonsCount = Math.floor(s.balance / s.price);
+        if (s.balance > 0) {
+          badgeHtml = `<div class="status-badge badge-positive">Оплачено вперед: ${lessonsCount} ур. (+${s.balance} ₽)</div>`;
+        } else if (s.balance < 0) {
+          badgeHtml = `<div class="status-badge badge-negative">Долг: ${Math.abs(s.balance)} ₽ (${Math.abs(lessonsCount)} ур.)</div>`;
+        } else {
+          badgeHtml = `<div class="status-badge badge-zero">Баланс: 0 ₽</div>`;
+        }
+
+        sList.innerHTML += `
+          <div class="card">
+            <div class="card-title">${s.name}</div>
+            <div style="font-size:14px; color:var(--subtext)">Урок: ${s.price} ₽</div>
+            ${badgeHtml}
+            <div class="btn-row">
+              <button class="btn-success" onclick="addPayment(${s.id})">+ Оплата</button>
+              <button class="btn-primary" onclick="markLessonHeld(${s.id})">✔ Урок проведен</button>
+            </div>
+          </div>
+        `;
+      });
+
+      // Отрисовка занятий
+      const lList = document.getElementById('lessons-list');
+      lList.innerHTML = '';
+      lessons.forEach(l => {
+        const dateFormatted = new Date(l.time).toLocaleString('ru-RU', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+        lList.innerHTML += `
+          <div class="card">
+            <div class="card-title">${l.studentName}</div>
+            <div style="font-size:14px; margin-bottom: 4px;">⏰ ${dateFormatted}</div>
+            <div style="font-size:13px; color:var(--subtext); margin-bottom: 8px;">${l.topic}</div>
+            <a class="btn-cal" href="${getCalUrl(l)}" download="lesson.ics">📅 Добавить в Календарь iPhone</a>
+          </div>
+        `;
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
